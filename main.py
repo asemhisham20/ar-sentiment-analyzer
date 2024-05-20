@@ -5,9 +5,11 @@ from nltk.stem import ISRIStemmer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 nltk.download('punkt')
 app = Flask(__name__)
+CORS(app)
 
 def tokenize_and_stem(text):
     stemmer = ISRIStemmer()
@@ -45,8 +47,7 @@ def get_rating(review):
 @app.route('/review', methods=['POST'])
 def post_endpoint():
     data = request.json
-
-    return jsonify(str(get_rating(data['review'])))
+    return jsonify({'rating': str(get_rating(data['review']))})
 
 if __name__ == '__main__':
     app.run(debug=True)
